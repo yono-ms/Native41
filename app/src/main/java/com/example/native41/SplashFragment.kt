@@ -30,18 +30,15 @@ class SplashFragment : BaseFragment() {
 
             viewModel.initialized.observe(viewLifecycleOwner) { initialized ->
                 if (initialized != null) {
-                    findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
+                    findNavController().popBackStack()
                     viewModel.initialized.value = null
                 }
             }
         }.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        logger.info("onViewCreated")
-        if (savedInstanceState == null) {
-            viewModel.initialize()
-        }
+    override fun onResume() {
+        super.onResume()
+        viewModel.initialize()
     }
 }

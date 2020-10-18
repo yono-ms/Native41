@@ -6,11 +6,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.native41.databinding.HomeFragmentBinding
 
 class HomeFragment : BaseFragment() {
 
     private val viewModel by viewModels<HomeViewModel>()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (savedInstanceState == null) {
+            findNavController().navigate(R.id.action_homeFragment_to_splashFragment)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,10 +36,8 @@ class HomeFragment : BaseFragment() {
         }.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        if (savedInstanceState == null) {
-            viewModel.initialize()
-        }
+    override fun onResume() {
+        super.onResume()
+        viewModel.initialize()
     }
 }
