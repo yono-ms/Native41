@@ -1,5 +1,6 @@
 package com.example.native41
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.native41.network.RepoModel
 import com.example.native41.network.ServerAPI
@@ -7,6 +8,11 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.builtins.ListSerializer
 
 class HomeViewModel : BaseViewModel() {
+
+    val login by lazy { MutableLiveData<String>() }
+
+    val items by lazy { MutableLiveData<List<RepoModel>>() }
+
     fun initialize() {
         logger.info("initialize")
         viewModelScope.launch {
@@ -25,6 +31,7 @@ class HomeViewModel : BaseViewModel() {
                         logger.debug("name=${it.name}")
                         logger.debug("updatedAt=${it.updatedAt}")
                     }
+                    items.value = repos
                 }.onFailure {
                     logger.error("initialize repos", it)
                 }
