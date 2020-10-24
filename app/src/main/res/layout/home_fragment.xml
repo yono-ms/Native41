@@ -30,7 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_login"
-                android:text="@{viewModel.login}" />
+                android:text="@={viewModel.login}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button

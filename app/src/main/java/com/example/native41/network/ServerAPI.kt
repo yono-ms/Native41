@@ -31,6 +31,7 @@ class ServerAPI {
         }
 
         suspend fun get(urlString: String): String {
+            logger.info("request START")
             val (request, response, result) = Fuel.get(urlString)
                 .awaitStringResponseResult()
             logger.info("$request")

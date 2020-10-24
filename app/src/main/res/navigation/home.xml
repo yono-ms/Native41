@@ -1,16 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/home"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home"
     app:startDestination="@id/homeFragment">
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.native41.HomeFragment"
-        android:label="@string/label_home" >
+        android:label="@string/label_home"
+        tools:layout="@layout/home_fragment">
         <action
             android:id="@+id/action_homeFragment_to_splashFragment"
             app:destination="@id/splashFragment" />
     </fragment>
     <fragment
         android:id="@+id/splashFragment"
-        android:name="com.example.native41.SplashFragment" />
+        android:name="com.example.native41.SplashFragment"
+        tools:layout="@layout/splash_fragment" />
+    <dialog
+        android:id="@+id/errorDialog"
+        android:name="com.example.native41.ErrorDialog"
+        android:label="ErrorDialog" >
+        <argument
+            android:name="titleId"
+            app:argType="integer" />
+        <argument
+            android:name="messageId"
+            app:argType="integer" />
+        <argument
+            android:name="messageArgs"
+            app:argType="string[]" />
+    </dialog>
+    <action
+        android:id="@+id/action_global_errorDialog"
+        app:destination="@id/errorDialog" />
 </navigation>

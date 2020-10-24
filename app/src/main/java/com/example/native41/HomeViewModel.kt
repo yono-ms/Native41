@@ -9,15 +9,36 @@ import kotlinx.serialization.builtins.ListSerializer
 
 class HomeViewModel : BaseViewModel() {
 
-    val login by lazy { MutableLiveData<String>() }
+    var login = MutableLiveData<String>()
 
     val items by lazy { MutableLiveData<List<RepoModel>>() }
 
     fun initialize() {
         logger.info("initialize")
+        if (login.value.isNullOrEmpty()) {
+            return
+        }
+        login.value?.let {
+            request(it)
+        }
+    }
+
+    fun onClick() {
+        logger.info("onClick")
+        if (login.value.isNullOrEmpty()) {
+            throwable.value = LoginNameException()
+            return
+        }
+        login.value?.let {
+            request(it)
+        }
+    }
+
+    private fun request(login: String) {
         viewModelScope.launch {
+            progress.value = true
             kotlin.runCatching {
-                ServerAPI.getUsers("google")
+                ServerAPI.getUsers(login)
             }.onSuccess { userModel ->
                 logger.debug("$userModel")
                 kotlin.runCatching {
@@ -34,9 +55,15 @@ class HomeViewModel : BaseViewModel() {
                     items.value = repos
                 }.onFailure {
                     logger.error("initialize repos", it)
+                    throwable.value = it
+                    items.value = listOf()
                 }
             }.onFailure {
                 logger.error("initialize users", it)
+                throwable.value = it
+                items.value = listOf()
+            }.also {
+                progress.value = false
             }
         }
     }
