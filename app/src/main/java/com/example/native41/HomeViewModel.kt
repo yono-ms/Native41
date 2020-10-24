@@ -9,9 +9,13 @@ import kotlinx.serialization.builtins.ListSerializer
 
 class HomeViewModel : BaseViewModel() {
 
-    var login = MutableLiveData<String>()
+    var login = MutableLiveData<String?>(App.prefs.login)
 
     val items by lazy { MutableLiveData<List<RepoModel>>() }
+
+    fun saveInstanceState() {
+        App.prefs.login = login.value
+    }
 
     fun initialize() {
         logger.info("initialize")
