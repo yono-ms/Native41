@@ -74,6 +74,9 @@ dependencies {
 
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.0"
 
+    // Preferences
+    implementation 'androidx.preference:preference-ktx:1.1.1'
+
     // log
     implementation 'org.slf4j:slf4j-api:1.7.30'
     implementation 'com.github.tony19:logback-android:2.0.0'
