@@ -40,6 +40,12 @@ class HomeFragment : BaseFragment() {
             it.viewModel = viewModel
             it.lifecycleOwner = viewLifecycleOwner
 
+            observeBaseViewModel(viewModel)
+
+            it.button.setOnClickListener {
+                viewModel.onClick()
+            }
+
             it.recyclerView.layoutManager = LinearLayoutManager(context)
             it.recyclerView.adapter = RepoAdapter().also { adapter ->
                 viewModel.items.observe(viewLifecycleOwner) { items ->
