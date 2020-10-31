@@ -1,9 +1,7 @@
 package com.example.native41
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -21,6 +19,7 @@ class HomeFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
         if (savedInstanceState == null) {
             findNavController().navigate(R.id.action_homeFragment_to_splashFragment)
         }
@@ -53,7 +52,31 @@ class HomeFragment : BaseFragment() {
                     adapter.submitList(items)
                 }
             }
+
+            viewModel.progress.observe(viewLifecycleOwner) {
+                requireActivity().invalidateOptionsMenu()
+            }
         }.root
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        logger.info("onCreateOptionsMenu")
+        inflater.inflate(R.menu.home, menu)
+        menu.findItem(R.id.refresh).apply {
+            isVisible = viewModel.progress.value == true
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        logger.info("onOptionsItemSelected")
+        return when (item.itemId) {
+            R.id.refresh -> {
+                logger.info("refresh menu.")
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onResume() {
