@@ -6,4 +6,5 @@
     <string name="dialog_error_title">Error</string>
     <string name="dialog_error_message">Cause : %1$s</string>
     <string name="preference_login">login</string>
+    <string name="menu_refresh">refresh</string>
 </resources>

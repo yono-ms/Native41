@@ -1,9 +1,9 @@
 package com.example.native41
 
+import android.animation.ObjectAnimator
+import android.graphics.drawable.RotateDrawable
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -21,6 +21,7 @@ class HomeFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
         if (savedInstanceState == null) {
             findNavController().navigate(R.id.action_homeFragment_to_splashFragment)
         }
@@ -53,7 +54,55 @@ class HomeFragment : BaseFragment() {
                     adapter.submitList(items)
                 }
             }
+
+            viewModel.progress.observe(viewLifecycleOwner) { isProgress ->
+                refreshIcon?.let { rotateDrawable ->
+                    if (isProgress) {
+                        objectAnimator =
+                            ObjectAnimator.ofInt(rotateDrawable, "level", 0, 10000).apply {
+                                duration = 1000
+                                repeatCount = 10
+                                start()
+                            }
+                    } else {
+                        objectAnimator?.cancel()
+                        ObjectAnimator.ofInt(rotateDrawable, "level", 10000).apply {
+                            duration = 1000
+                            start()
+                        }
+                    }
+                }
+            }
         }.root
+    }
+
+    private var objectAnimator: ObjectAnimator? = null
+    private var refreshIcon: RotateDrawable? = null
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        logger.info("onCreateOptionsMenu")
+        inflater.inflate(R.menu.home, menu)
+        menu.findItem(R.id.refresh).apply {
+            kotlin.runCatching {
+                icon as? RotateDrawable
+            }.onSuccess {
+                refreshIcon = it
+            }.onFailure {
+                logger.error("icon is not RotateDrawable", it)
+            }
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        logger.info("onOptionsItemSelected")
+        return when (item.itemId) {
+            R.id.refresh -> {
+                logger.info("refresh menu.")
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onResume() {
