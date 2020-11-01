@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/refresh"
-        android:icon="@android:drawable/ic_popup_sync"
+        android:icon="@drawable/ic_popup_sync_progress"
         android:title="@string/menu_refresh"
         app:showAsAction="always" />
 </menu>

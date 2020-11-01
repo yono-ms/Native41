@@ -1,5 +1,7 @@
 package com.example.native41
 
+import android.animation.ObjectAnimator
+import android.graphics.drawable.RotateDrawable
 import android.os.Bundle
 import android.view.*
 import androidx.databinding.DataBindingUtil
@@ -53,18 +55,42 @@ class HomeFragment : BaseFragment() {
                 }
             }
 
-            viewModel.progress.observe(viewLifecycleOwner) {
-                requireActivity().invalidateOptionsMenu()
+            viewModel.progress.observe(viewLifecycleOwner) { isProgress ->
+                refreshIcon?.let { rotateDrawable ->
+                    if (isProgress) {
+                        objectAnimator =
+                            ObjectAnimator.ofInt(rotateDrawable, "level", 0, 10000).apply {
+                                duration = 1000
+                                repeatCount = 10
+                                start()
+                            }
+                    } else {
+                        objectAnimator?.cancel()
+                        ObjectAnimator.ofInt(rotateDrawable, "level", 10000).apply {
+                            duration = 1000
+                            start()
+                        }
+                    }
+                }
             }
         }.root
     }
+
+    private var objectAnimator: ObjectAnimator? = null
+    private var refreshIcon: RotateDrawable? = null
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         logger.info("onCreateOptionsMenu")
         inflater.inflate(R.menu.home, menu)
         menu.findItem(R.id.refresh).apply {
-            isVisible = viewModel.progress.value == true
+            kotlin.runCatching {
+                icon as? RotateDrawable
+            }.onSuccess {
+                refreshIcon = it
+            }.onFailure {
+                logger.error("icon is not RotateDrawable", it)
+            }
         }
     }
 
