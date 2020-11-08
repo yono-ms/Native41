@@ -27,8 +27,8 @@ class HomeViewModel : BaseViewModel() {
         }
     }
 
-    fun onClick() {
-        logger.info("onClick")
+    fun onSearch() {
+        logger.info("onSearch")
         if (login.value.isNullOrEmpty()) {
             throwable.value = LoginNameException()
             return

@@ -1,9 +1,11 @@
 package com.example.native41
 
 import android.animation.ObjectAnimator
+import android.content.Context
 import android.graphics.drawable.RotateDrawable
 import android.os.Bundle
 import android.view.*
+import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -43,8 +45,27 @@ class HomeFragment : BaseFragment() {
 
             observeBaseViewModel(viewModel)
 
-            it.button.setOnClickListener {
-                viewModel.onClick()
+            it.editTextLogin.setOnKeyListener { view, keyCode, event ->
+                if (event.action == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_ENTER) {
+                    viewModel.onSearch()
+                    activity?.apply {
+                        // hide keyboard
+                        (getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager)?.apply {
+                            hideSoftInputFromWindow(
+                                view.windowToken,
+                                InputMethodManager.HIDE_NOT_ALWAYS
+                            )
+                        }
+                        // move focus
+                        val parent = view.parent as View
+                        parent.isFocusable = true
+                        parent.isFocusableInTouchMode = true
+                        parent.requestFocus()
+                    }
+                    true
+                } else {
+                    false
+                }
             }
 
             it.recyclerView.layoutManager = LinearLayoutManager(context)
