@@ -12,6 +12,9 @@
         <action
             android:id="@+id/action_homeFragment_to_splashFragment"
             app:destination="@id/splashFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_repoFragment"
+            app:destination="@id/repoFragment" />
     </fragment>
     <fragment
         android:id="@+id/splashFragment"
@@ -34,4 +37,16 @@
     <action
         android:id="@+id/action_global_errorDialog"
         app:destination="@id/errorDialog" />
+    <fragment
+        android:id="@+id/repoFragment"
+        android:name="com.example.native41.RepoFragment"
+        android:label="RepoFragment"
+        tools:layout="@layout/repo_fragment">
+        <argument
+            android:name="login"
+            app:argType="string" />
+        <argument
+            android:name="repo"
+            app:argType="string" />
+    </fragment>
 </navigation>
