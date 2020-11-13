@@ -69,7 +69,15 @@ class HomeFragment : BaseFragment() {
             }
 
             it.recyclerView.layoutManager = LinearLayoutManager(context)
-            it.recyclerView.adapter = RepoAdapter().also { adapter ->
+            it.recyclerView.adapter = RepoAdapter { repoModel ->
+                logger.info("onClick $repoModel")
+                findNavController().navigate(
+                    HomeFragmentDirections.actionHomeFragmentToRepoFragment(
+                        repoModel.owner.login,
+                        repoModel.name
+                    )
+                )
+            }.also { adapter ->
                 viewModel.items.observe(viewLifecycleOwner) { items ->
                     logger.info("items changed.")
                     adapter.submitList(items)
@@ -136,16 +144,17 @@ class HomeFragment : BaseFragment() {
         viewModel.saveInstanceState()
     }
 
-    class RepoAdapter : ListAdapter<RepoModel, RepoAdapter.ViewHolder>(object :
-        DiffUtil.ItemCallback<RepoModel>() {
-        override fun areItemsTheSame(oldItem: RepoModel, newItem: RepoModel): Boolean {
-            return oldItem.id == newItem.id
-        }
+    class RepoAdapter(val onClick: (RepoModel) -> Unit) :
+        ListAdapter<RepoModel, RepoAdapter.ViewHolder>(object :
+            DiffUtil.ItemCallback<RepoModel>() {
+            override fun areItemsTheSame(oldItem: RepoModel, newItem: RepoModel): Boolean {
+                return oldItem.id == newItem.id
+            }
 
-        override fun areContentsTheSame(oldItem: RepoModel, newItem: RepoModel): Boolean {
-            return oldItem == newItem
-        }
-    }) {
+            override fun areContentsTheSame(oldItem: RepoModel, newItem: RepoModel): Boolean {
+                return oldItem == newItem
+            }
+        }) {
         class ViewHolder(val binding: RepoItemBinding) : RecyclerView.ViewHolder(binding.root)
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -155,7 +164,11 @@ class HomeFragment : BaseFragment() {
                 parent,
                 false
             )
-            return ViewHolder(binding)
+            return ViewHolder(binding).also {
+                it.itemView.setOnClickListener {
+                    binding.viewModel?.let(onClick)
+                }
+            }
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
