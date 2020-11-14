@@ -144,7 +144,7 @@ class HomeFragment : BaseFragment() {
         viewModel.saveInstanceState()
     }
 
-    class RepoAdapter(val onClick: (RepoModel) -> Unit) :
+    class RepoAdapter(private val onClick: (RepoModel) -> Unit) :
         ListAdapter<RepoModel, RepoAdapter.ViewHolder>(object :
             DiffUtil.ItemCallback<RepoModel>() {
             override fun areItemsTheSame(oldItem: RepoModel, newItem: RepoModel): Boolean {
