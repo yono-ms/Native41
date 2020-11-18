@@ -2,10 +2,20 @@ package com.example.native41
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.delay
+import com.example.native41.database.CalModel
+import com.example.native41.database.CalPageModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
+import java.util.*
 
 class SplashViewModel : BaseViewModel() {
+
+    companion object {
+        const val pattern = "yyyy/MM/dd"
+        const val startDate = "2000/01/01"
+    }
 
     val busy by lazy { MutableLiveData(false) }
     val initialized: MutableLiveData<Unit> by lazy { MutableLiveData(null) }
@@ -18,9 +28,32 @@ class SplashViewModel : BaseViewModel() {
         }
         busy.value = true
         viewModelScope.launch {
-            delay(1000)
-            initialized.value = Unit
-            busy.value = false
+            withContext(Dispatchers.IO) {
+                App.db.clearAllTables()
+                val cal = Calendar.getInstance().apply {
+                    SimpleDateFormat(pattern, Locale.getDefault()).parse(startDate)?.let {
+                        time = it
+                    }
+                }
+                val startYear = cal[Calendar.YEAR]
+                val thisYear = Calendar.getInstance().apply {
+                    time = Date()
+                }.let {
+                    it[Calendar.YEAR]
+                }
+                val list = mutableListOf<CalModel>()
+                while (cal[Calendar.YEAR] in startYear..thisYear) {
+                    list.add(CalModel.fromCalendar(cal))
+                    cal.add(Calendar.DAY_OF_YEAR, 1)
+                }
+                App.db.calModelDao().insertAll(*list.toTypedArray())
+                val pageList = mutableListOf<CalPageModel>()
+                App.db.calModelDao().getPageIds().forEach { e -> pageList.add(CalPageModel(e)) }
+                App.db.calPageModelDao().insertAll(*pageList.toTypedArray())
+
+                initialized.postValue(Unit)
+                busy.postValue(false)
+            }
         }
     }
 }

@@ -17,6 +17,7 @@ data class CalModel(
     @ColumnInfo(name = "week_of_month") val weekOfMonth: Int,
     @ColumnInfo(name = "week_of_year") val weekOfYear: Int,
     @ColumnInfo(name = "year") val year: Int,
+    @ColumnInfo(name = "page_id") val pageId: Int,
 ) {
     companion object {
         fun fromCalendar(cal: Calendar):CalModel {
@@ -30,7 +31,8 @@ data class CalModel(
                 cal[Calendar.MONTH],
                 cal[Calendar.WEEK_OF_MONTH],
                 cal[Calendar.WEEK_OF_YEAR],
-                cal[Calendar.YEAR]
+                cal[Calendar.YEAR],
+                cal[Calendar.YEAR]*100 + cal[Calendar.MONTH]
             )
         }
     }

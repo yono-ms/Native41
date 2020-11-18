@@ -90,7 +90,7 @@ class HomeFragment : BaseFragment() {
                         objectAnimator =
                             ObjectAnimator.ofInt(rotateDrawable, "level", 0, 10000).apply {
                                 duration = 1000
-                                repeatCount = 10
+                                repeatCount = 100
                                 start()
                             }
                     } else {

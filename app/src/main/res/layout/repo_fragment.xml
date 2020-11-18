@@ -36,5 +36,15 @@
             app:layout_constraintStart_toStartOf="@+id/textViewLogin"
             app:layout_constraintTop_toBottomOf="@+id/textViewLogin"
             tools:text="repo" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPager2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewRepo" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
