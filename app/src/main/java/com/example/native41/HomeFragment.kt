@@ -90,7 +90,7 @@ class HomeFragment : BaseFragment() {
                         objectAnimator =
                             ObjectAnimator.ofInt(rotateDrawable, "level", 0, 10000).apply {
                                 duration = 1000
-                                repeatCount = 10
+                                repeatCount = 100
                                 start()
                             }
                     } else {
@@ -144,7 +144,7 @@ class HomeFragment : BaseFragment() {
         viewModel.saveInstanceState()
     }
 
-    class RepoAdapter(val onClick: (RepoModel) -> Unit) :
+    class RepoAdapter(private val onClick: (RepoModel) -> Unit) :
         ListAdapter<RepoModel, RepoAdapter.ViewHolder>(object :
             DiffUtil.ItemCallback<RepoModel>() {
             override fun areItemsTheSame(oldItem: RepoModel, newItem: RepoModel): Boolean {

@@ -57,6 +57,7 @@ class HomeViewModel : BaseViewModel() {
                         logger.debug("updatedAt=${it.updatedAt}")
                     }
                     items.value = repos
+                    App.prefs.login = login
                 }.onFailure {
                     logger.error("initialize repos", it)
                     throwable.value = it
