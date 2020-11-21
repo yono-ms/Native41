@@ -7,17 +7,19 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.native41.database.CalModel
-import com.example.native41.database.CalPageWithCalModel
 import com.example.native41.databinding.CalendarFragmentBinding
 import com.example.native41.databinding.CalendarItemBinding
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 class CalendarFragment : Fragment() {
+
+    val logger: Logger by lazy { LoggerFactory.getLogger(javaClass.simpleName) }
 
     companion object {
         private const val KEY_PAGE_ID = "PAGE_ID"
@@ -31,14 +33,15 @@ class CalendarFragment : Fragment() {
         }
     }
 
-    private val viewModel by viewModels<CalendarViewModel>()
+    private val pageId by lazy { arguments?.getInt(KEY_PAGE_ID) ?: 0 }
 
-    lateinit var items: LiveData<List<CalModel>>
+    private val viewModel by viewModels<CalendarViewModel> { CalendarViewModel.Factory(pageId) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        logger.info("onCreateView")
         return DataBindingUtil.inflate<CalendarFragmentBinding>(
             inflater,
             R.layout.calendar_fragment,
@@ -50,22 +53,16 @@ class CalendarFragment : Fragment() {
 
             it.recyclerViewCalendar.layoutManager = GridLayoutManager(context, 7)
             it.recyclerViewCalendar.adapter = CalendarAdapter().also { calendarAdapter ->
-                items.observe(viewLifecycleOwner){calModels->
+                viewModel.items.observe(viewLifecycleOwner) { calModels ->
+                    logger.info("calModels changed.")
                     calendarAdapter.submitList(calModels)
                 }
             }
         }.root
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.getInt(KEY_PAGE_ID)?.let {
-            items = App.db.calModelDao().getAll(it)
-        }
-    }
-
-    class CalendarAdapter: ListAdapter<CalModel, CalendarAdapter.ViewHolder>(object :
-        DiffUtil.ItemCallback<CalModel>(){
+    class CalendarAdapter : ListAdapter<CalModel, CalendarAdapter.ViewHolder>(object :
+        DiffUtil.ItemCallback<CalModel>() {
         override fun areItemsTheSame(oldItem: CalModel, newItem: CalModel): Boolean {
             return oldItem.time == newItem.time
         }
@@ -74,9 +71,12 @@ class CalendarFragment : Fragment() {
             return oldItem == newItem
         }
     }) {
-        class ViewHolder(val binding: CalendarItemBinding): RecyclerView.ViewHolder(binding.root)
+        class ViewHolder(val binding: CalendarItemBinding) : RecyclerView.ViewHolder(binding.root)
+
+        val logger: Logger by lazy { LoggerFactory.getLogger(javaClass.simpleName) }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            logger.trace("onCreateViewHolder")
             return DataBindingUtil.inflate<CalendarItemBinding>(
                 LayoutInflater.from(parent.context),
                 R.layout.calendar_item,
@@ -88,6 +88,7 @@ class CalendarFragment : Fragment() {
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            logger.trace("onBindViewHolder")
             val item = getItem(position)
             holder.binding.viewModel = item
         }

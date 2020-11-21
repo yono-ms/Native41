@@ -1,6 +1,5 @@
 package com.example.native41.database
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
