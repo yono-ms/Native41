@@ -22,4 +22,7 @@ interface CalModelDao {
 
     @Query("SELECT DISTINCT page_id FROM cal_model ORDER BY time")
     suspend fun getPageIds(): List<Int>
+
+    @Query("SELECT DISTINCT page_id FROM cal_model ORDER BY time")
+    fun getPageIdsLiveData(): LiveData<List<Int>>
 }

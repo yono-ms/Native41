@@ -1,13 +1,11 @@
 package com.example.native41
 
-import android.util.Log
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.native41.database.AppDatabase
 import com.example.native41.database.CalModel
 import com.example.native41.database.CalPageModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert

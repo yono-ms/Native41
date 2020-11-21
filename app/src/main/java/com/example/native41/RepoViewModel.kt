@@ -5,5 +5,5 @@ import androidx.lifecycle.MutableLiveData
 class RepoViewModel : BaseViewModel() {
     val login by lazy { MutableLiveData<String>() }
     val repo by lazy { MutableLiveData<String>() }
-    val pageItems by lazy { App.db.calPageModelDao().getCalPageWithCalModelsLiveData() }
+    val pageIds by lazy { App.db.calModelDao().getPageIdsLiveData() }
 }
