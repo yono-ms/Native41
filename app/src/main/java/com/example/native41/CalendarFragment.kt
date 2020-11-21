@@ -7,10 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.*
 import com.example.native41.database.CalModel
 import com.example.native41.databinding.CalendarFragmentBinding
 import com.example.native41.databinding.CalendarItemBinding
@@ -51,11 +48,20 @@ class CalendarFragment : Fragment() {
             it.viewModel = viewModel
             it.lifecycleOwner = viewLifecycleOwner
 
-            it.recyclerViewCalendar.layoutManager = GridLayoutManager(context, 7)
-            it.recyclerViewCalendar.adapter = CalendarAdapter().also { calendarAdapter ->
-                viewModel.items.observe(viewLifecycleOwner) { calModels ->
-                    logger.info("calModels changed.")
-                    calendarAdapter.submitList(calModels)
+            it.recyclerViewCalendar.also { recyclerView ->
+                val layoutManager = GridLayoutManager(context, 7)
+                recyclerView.addItemDecoration(
+                    DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL)
+                )
+                recyclerView.addItemDecoration(
+                    DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
+                )
+                recyclerView.layoutManager = layoutManager
+                recyclerView.adapter = CalendarAdapter().also { calendarAdapter ->
+                    viewModel.items.observe(viewLifecycleOwner) { calModels ->
+                        logger.info("calModels changed.")
+                        calendarAdapter.submitList(calModels)
+                    }
                 }
             }
         }.root

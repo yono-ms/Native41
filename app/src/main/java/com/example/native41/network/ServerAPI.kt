@@ -18,6 +18,7 @@ class ServerAPI {
         private val json = Json {
             ignoreUnknownKeys = true
             coerceInputValues = true
+            isLenient = true
         }
 
         suspend fun getUsers(login: String): UserModel {

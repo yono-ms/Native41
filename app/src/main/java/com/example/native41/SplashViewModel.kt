@@ -14,7 +14,7 @@ class SplashViewModel : BaseViewModel() {
 
     companion object {
         const val pattern = "yyyy/MM/dd"
-        const val startDate = "2000/01/01"
+        const val startDate = "2015/01/01"
     }
 
     val busy by lazy { MutableLiveData(false) }
