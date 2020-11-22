@@ -28,7 +28,7 @@ class CalendarViewModel(private val pageId: Int) : BaseViewModel() {
                         val cal = Calendar.getInstance().apply { time = Date(first.time) }
                         while (cal[Calendar.DAY_OF_WEEK] != cal.getActualMinimum(Calendar.DAY_OF_WEEK)) {
                             cal.add(Calendar.DAY_OF_YEAR, -1)
-                            list.add(0, CalModel.fromCalendar(cal))
+                            list.add(0, CalModel.fromCalendar(cal, true))
                         }
                     }
                     list.addAll(raw)
@@ -36,7 +36,7 @@ class CalendarViewModel(private val pageId: Int) : BaseViewModel() {
                         val cal = Calendar.getInstance().apply { time = Date(last.time) }
                         while (cal[Calendar.DAY_OF_WEEK] != cal.getActualMaximum(Calendar.DAY_OF_WEEK)) {
                             cal.add(Calendar.DAY_OF_YEAR, 1)
-                            list.add(CalModel.fromCalendar(cal))
+                            list.add(CalModel.fromCalendar(cal, true))
                         }
                     }
                     value = list

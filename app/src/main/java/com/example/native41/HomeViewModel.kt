@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.native41.network.RepoModel
 import com.example.native41.network.ServerAPI
+import com.example.native41.network.UserModel
 import kotlinx.coroutines.launch
 import kotlinx.serialization.builtins.ListSerializer
 
@@ -42,7 +43,10 @@ class HomeViewModel : BaseViewModel() {
         viewModelScope.launch {
             progress.value = true
             kotlin.runCatching {
-                ServerAPI.getUsers(login)
+                ServerAPI.getDecode(
+                    ServerAPI.getUsersUrl(login),
+                    UserModel.serializer()
+                )
             }.onSuccess { userModel ->
                 logger.debug("$userModel")
                 kotlin.runCatching {

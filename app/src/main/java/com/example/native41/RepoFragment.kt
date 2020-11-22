@@ -34,6 +34,9 @@ class RepoFragment : BaseFragment() {
             observeBaseViewModel(viewModel)
 
             it.viewPager2.adapter = CalendarPagerAdapter(this, viewModel.pageIds)
+            viewModel.pageIds.observe(viewLifecycleOwner) { pageIds ->
+                it.viewPager2.currentItem = pageIds.size - 1
+            }
 
         }.root
     }
