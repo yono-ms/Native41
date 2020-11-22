@@ -3,6 +3,7 @@ package com.example.native41.database
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.native41.R
 import java.util.*
 
 @Entity(tableName = "cal_model")
@@ -18,9 +19,10 @@ data class CalModel(
     @ColumnInfo(name = "week_of_year") val weekOfYear: Int,
     @ColumnInfo(name = "year") val year: Int,
     @ColumnInfo(name = "page_id") val pageId: Int,
+    @ColumnInfo(name = "padding") val padding: Boolean,
 ) {
     companion object {
-        fun fromCalendar(cal: Calendar):CalModel {
+        fun fromCalendar(cal: Calendar, padding: Boolean = false): CalModel {
             return CalModel(
                 cal.time.time,
                 cal[Calendar.DATE],
@@ -32,8 +34,31 @@ data class CalModel(
                 cal[Calendar.WEEK_OF_MONTH],
                 cal[Calendar.WEEK_OF_YEAR],
                 cal[Calendar.YEAR],
-                cal[Calendar.YEAR]*100 + cal[Calendar.MONTH]
+                cal[Calendar.YEAR] * 100 + cal[Calendar.MONTH],
+                padding,
             )
         }
     }
+
+    val textColor: Int
+        get() {
+            return if (padding) {
+                R.color.dark_gray
+            } else {
+                when (dayOfWeek) {
+                    Calendar.SUNDAY -> R.color.sunday
+                    Calendar.SATURDAY -> R.color.saturday
+                    else -> R.color.weekday
+                }
+            }
+        }
+
+    val background: Int
+        get() {
+            return if (padding) {
+                R.color.gray
+            } else {
+                R.color.white
+            }
+        }
 }

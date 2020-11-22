@@ -16,9 +16,10 @@ class RepoViewModel : BaseViewModel() {
         viewModelScope.launch {
             progress.value = true
             kotlin.runCatching {
-                val urlRepos = "https://api.github.com/repos/"
-                val url = "$urlRepos${login.value}/${repo.value}/commits"
-                ServerAPI.getDecode(url, ListSerializer(CommitModel.serializer()))
+                ServerAPI.getDecode(
+                    ServerAPI.getCommitsUrl(login.value, repo.value),
+                    ListSerializer(CommitModel.serializer())
+                )
             }.onSuccess {
                 logger.debug("$it")
             }.onFailure {
