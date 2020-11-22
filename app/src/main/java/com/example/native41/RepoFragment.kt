@@ -45,6 +45,12 @@ class RepoFragment : BaseFragment() {
         viewModel.repo.value = args.repo
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        viewModel.getCommits()
+    }
+
     class CalendarPagerAdapter(fragment: Fragment, private val items: LiveData<List<Int>>) :
         FragmentStateAdapter(fragment) {
 
