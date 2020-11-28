@@ -9,7 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.example.native41.database.CommitDateModel
+import com.example.native41.databinding.CommitItemBinding
 import com.example.native41.databinding.RepoFragmentBinding
 
 class RepoFragment : BaseFragment() {
@@ -21,7 +27,7 @@ class RepoFragment : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         return DataBindingUtil.inflate<RepoFragmentBinding>(
             inflater,
             R.layout.repo_fragment,
@@ -36,6 +42,13 @@ class RepoFragment : BaseFragment() {
             it.viewPager2.adapter = CalendarPagerAdapter(this, viewModel.pageIds)
             viewModel.pageIds.observe(viewLifecycleOwner) { pageIds ->
                 it.viewPager2.currentItem = pageIds.size - 1
+            }
+
+            it.recyclerViewCommit.layoutManager = LinearLayoutManager(context)
+            it.recyclerViewCommit.adapter = CommitAdapter().also { commitAdapter ->
+                viewModel.commitDateList.observe(viewLifecycleOwner) { items ->
+                    commitAdapter.submitList(items)
+                }
             }
 
         }.root
@@ -73,5 +86,37 @@ class RepoFragment : BaseFragment() {
             } ?: throw IllegalStateException("no item.")
         }
 
+    }
+
+    class CommitAdapter : ListAdapter<CommitDateModel, CommitAdapter.ViewHolder>(object :
+        DiffUtil.ItemCallback<CommitDateModel>() {
+        override fun areItemsTheSame(oldItem: CommitDateModel, newItem: CommitDateModel): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(
+            oldItem: CommitDateModel,
+            newItem: CommitDateModel
+        ): Boolean {
+            return oldItem == newItem
+        }
+    }) {
+        class ViewHolder(val binding: CommitItemBinding) : RecyclerView.ViewHolder(binding.root)
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            return ViewHolder(
+                DataBindingUtil.inflate(
+                    LayoutInflater.from(parent.context),
+                    R.layout.commit_item,
+                    parent,
+                    false
+                )
+            )
+        }
+
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            val item = getItem(position)
+            holder.binding.viewModel = item
+        }
     }
 }

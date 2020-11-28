@@ -7,21 +7,22 @@
 
         <variable
             name="viewModel"
-            type="com.example.native41.database.CalModel" />
+            type="com.example.native41.database.CalWithCommitsModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/calendar_cell_height"
-        android:background="@{context.getColor(viewModel.background)}"
+        android:background="@{context.getColor(viewModel.cal.background)}"
         android:padding="8dp">
 
         <TextView
             android:id="@+id/textViewDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{String.valueOf(viewModel.dayOfMonth)}"
-            android:textColor="@{context.getColor(viewModel.textColor)}"
+            android:background="@{viewModel.commitDateModels.size() > 0 ? @android:color/holo_red_dark : @android:color/transparent}"
+            android:text="@{String.valueOf(viewModel.cal.dayOfMonth)}"
+            android:textColor="@{context.getColor(viewModel.cal.textColor)}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
