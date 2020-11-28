@@ -17,7 +17,7 @@ class SplashFragment : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         logger.info("onCreateView")
         return DataBindingUtil.inflate<SplashFragmentBinding>(
             inflater,

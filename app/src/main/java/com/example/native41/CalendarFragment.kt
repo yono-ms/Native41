@@ -8,7 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.*
-import com.example.native41.database.CalModel
+import com.example.native41.database.CalWithCommitsModel
 import com.example.native41.databinding.CalendarFragmentBinding
 import com.example.native41.databinding.CalendarItemBinding
 import org.slf4j.Logger
@@ -37,7 +37,7 @@ class CalendarFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         logger.info("onCreateView")
         return DataBindingUtil.inflate<CalendarFragmentBinding>(
             inflater,
@@ -58,22 +58,22 @@ class CalendarFragment : Fragment() {
                 )
                 recyclerView.layoutManager = layoutManager
                 recyclerView.adapter = CalendarAdapter().also { calendarAdapter ->
-                    viewModel.items.observe(viewLifecycleOwner) { calModels ->
+                    viewModel.items.observe(viewLifecycleOwner) { items ->
                         logger.info("calModels changed.")
-                        calendarAdapter.submitList(calModels)
+                        calendarAdapter.submitList(items)
                     }
                 }
             }
         }.root
     }
 
-    class CalendarAdapter : ListAdapter<CalModel, CalendarAdapter.ViewHolder>(object :
-        DiffUtil.ItemCallback<CalModel>() {
-        override fun areItemsTheSame(oldItem: CalModel, newItem: CalModel): Boolean {
-            return oldItem.time == newItem.time
+    class CalendarAdapter : ListAdapter<CalWithCommitsModel, CalendarAdapter.ViewHolder>(object :
+        DiffUtil.ItemCallback<CalWithCommitsModel>() {
+        override fun areItemsTheSame(oldItem: CalWithCommitsModel, newItem: CalWithCommitsModel): Boolean {
+            return oldItem.cal.time == newItem.cal.time
         }
 
-        override fun areContentsTheSame(oldItem: CalModel, newItem: CalModel): Boolean {
+        override fun areContentsTheSame(oldItem: CalWithCommitsModel, newItem: CalWithCommitsModel): Boolean {
             return oldItem == newItem
         }
     }) {

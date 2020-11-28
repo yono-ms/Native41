@@ -36,13 +36,14 @@ class SplashViewModel : BaseViewModel() {
                     }
                 }
                 val startYear = cal[Calendar.YEAR]
-                val thisYear = Calendar.getInstance().apply {
-                    time = Date()
-                }.let {
-                    it[Calendar.YEAR]
-                }
+                val todayCal = Calendar.getInstance().apply { time = Date() }
+                val thisYear = todayCal[Calendar.YEAR]
+                val thisMonth = todayCal[Calendar.MONTH]
                 val list = mutableListOf<CalModel>()
                 while (cal[Calendar.YEAR] in startYear..thisYear) {
+                    if (cal[Calendar.YEAR] == thisYear && cal[Calendar.MONTH] > thisMonth) {
+                        break
+                    }
                     list.add(CalModel.fromCalendar(cal))
                     cal.add(Calendar.DAY_OF_YEAR, 1)
                 }
