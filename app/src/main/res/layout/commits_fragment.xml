@@ -7,47 +7,25 @@
 
         <variable
             name="viewModel"
-            type="com.example.native41.RepoViewModel" />
+            type="com.example.native41.calendar.CommitsViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".RepoFragment">
-
-        <TextView
-            android:id="@+id/textViewLogin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="@{viewModel.login}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="login" />
-
-        <TextView
-            android:id="@+id/textViewRepo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@{viewModel.repo}"
-            app:layout_constraintStart_toStartOf="@+id/textViewLogin"
-            app:layout_constraintTop_toBottomOf="@+id/textViewLogin"
-            tools:text="repo" />
+        tools:context=".calendar.CommitsFragment">
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPager2"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewRepo" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewCommit"
+            android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
