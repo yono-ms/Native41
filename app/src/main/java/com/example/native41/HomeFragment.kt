@@ -72,7 +72,7 @@ class HomeFragment : BaseFragment() {
             it.recyclerView.adapter = RepoAdapter { repoModel ->
                 logger.info("onClick $repoModel")
                 findNavController().navigate(
-                    HomeFragmentDirections.actionHomeFragmentToRepoFragment(
+                    HomeFragmentDirections.actionHomeFragmentToCommitsFragment(
                         repoModel.owner.login,
                         repoModel.name
                     )

@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.native41.database.CommitDateModel" />
+            type="com.example.native41.database.CommitEntity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:text="@{viewModel.message}"
+            android:text="@{viewModel.committerDateString}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="2020/12/12" />

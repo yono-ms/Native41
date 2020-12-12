@@ -13,8 +13,8 @@
             android:id="@+id/action_homeFragment_to_splashFragment"
             app:destination="@id/splashFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_repoFragment"
-            app:destination="@id/repoFragment" />
+            android:id="@+id/action_homeFragment_to_commitsFragment"
+            app:destination="@id/commitsFragment" />
     </fragment>
     <fragment
         android:id="@+id/splashFragment"
@@ -38,10 +38,9 @@
         android:id="@+id/action_global_errorDialog"
         app:destination="@id/errorDialog" />
     <fragment
-        android:id="@+id/repoFragment"
-        android:name="com.example.native41.RepoFragment"
-        android:label="RepoFragment"
-        tools:layout="@layout/repo_fragment">
+        android:id="@+id/commitsFragment"
+        android:name="com.example.native41.calendar.CommitsFragment"
+        tools:layout="@layout/commits_fragment">
         <argument
             android:name="login"
             app:argType="string" />
