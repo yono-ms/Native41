@@ -29,8 +29,6 @@ class CommitsViewModel(private val login: String, private val repo: String) : Ba
     fun refresh() {
         logger.info("$login $repo")
         viewModelScope.launch {
-            yearMonths.value = listOf(YearMonth(2020, 9), YearMonth(2020, 10), YearMonth(2020, 11))
-
             progress.value = true
             kotlin.runCatching {
                 App.db.commitEntityDao().deleteAll()
@@ -48,6 +46,8 @@ class CommitsViewModel(private val login: String, private val repo: String) : Ba
                 App.db.commitEntityDao().insertAll(*entities.toTypedArray())
             }.onSuccess {
                 logger.info("success.")
+                yearMonths.value =
+                    listOf(YearMonth(2020, 9), YearMonth(2020, 10), YearMonth(2020, 11))
             }.onFailure {
                 logger.error("refresh", it)
                 throwable.value = it
