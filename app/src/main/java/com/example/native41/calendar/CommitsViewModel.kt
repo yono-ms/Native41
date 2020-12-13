@@ -1,6 +1,5 @@
 package com.example.native41.calendar
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -22,7 +21,7 @@ class CommitsViewModel(private val login: String, private val repo: String) : Ba
         }
     }
 
-    val yearMonths by lazy { MutableLiveData<List<YearMonth>>() }
+    val yearMonths by lazy { App.db.commitEntityDao().getYearMonthLiveData() }
 
     val commitEntities by lazy { App.db.commitEntityDao().getAllLiveData() }
 
@@ -46,8 +45,6 @@ class CommitsViewModel(private val login: String, private val repo: String) : Ba
                 App.db.commitEntityDao().insertAll(*entities.toTypedArray())
             }.onSuccess {
                 logger.info("success.")
-                yearMonths.value =
-                    listOf(YearMonth(2020, 9), YearMonth(2020, 10), YearMonth(2020, 11))
             }.onFailure {
                 logger.error("refresh", it)
                 throwable.value = it
