@@ -9,11 +9,11 @@ data class MonthItem(
     val dayOfWeek: Int,
     var isCommitted: Boolean = false
 ) {
-    fun dayOfMonthString(): String {
+    fun getDayOfMonthString(): String {
         return dayOfMonth.toString()
     }
 
-    fun dayOfWeekColor(): Int {
+    fun getDayOfWeekColor(): Int {
         return when (dayOfWeek) {
             1 -> Color.RED
             7 -> Color.BLUE
