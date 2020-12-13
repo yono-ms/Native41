@@ -30,7 +30,7 @@ class DatabaseTest {
     @Test
     fun getAll() = runBlocking {
         assertNotNull("db is null", db)
-        val list = db.calModelDao().getAll()
+        val list = db.commitEntityDao().getAll()
         assertEquals("getAll check zero.", 0, list.size)
     }
 
