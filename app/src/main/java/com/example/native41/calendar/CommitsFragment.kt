@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
+import androidx.core.view.size
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -57,8 +59,25 @@ class CommitsFragment : BaseFragment() {
                 }
 
             }.apply {
-                viewModel.yearMonths.observe(viewLifecycleOwner) {
+                viewModel.yearMonths.observe(viewLifecycleOwner) { list ->
+                    logger.info("yearMonths size=${list.size}")
                     notifyDataSetChanged()
+                    if (list.isNotEmpty()) {
+                        (it.viewPager2.getChildAt(0) as? RecyclerView)?.apply {
+                            viewTreeObserver.addOnGlobalLayoutListener(
+                                object : ViewTreeObserver.OnGlobalLayoutListener {
+                                    override fun onGlobalLayout() {
+                                        val count = adapter?.itemCount
+                                        logger.debug("count=$count")
+                                        if (count == list.size) {
+                                            viewTreeObserver.removeOnGlobalLayoutListener(this)
+                                            it.viewPager2.setCurrentItem(list.lastIndex, false)
+                                        }
+                                    }
+                                }
+                            )
+                        }
+                    }
                 }
             }
 
